@@ -1,14 +1,19 @@
 import config from './src/config/config.js';
 import connectDB from './src/config/db.js';
 import app from './src/app.js';
+import logger from './src/config/logger.js';
 
-const port = config.port || 3000;
+const { port, mongoUri } = config;
+
+if(!port || !mongoUri) {
+    throw new Error("Config variables are not available");
+}
 
 async function start() {
-    await connectDB(config.mongo_uri);
+    await connectDB(mongoUri);
 
     app.listen(port, () => {
-        console.log("Server running on Port: ", port);
+        logger.info(`Server running on Port: ${port}`);
     })
 }
 
