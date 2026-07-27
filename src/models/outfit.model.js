@@ -15,19 +15,18 @@ const outfitSchema = new mongoose.Schema(
             trim: true
         },
 
-        clothes: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Clothes",
+        clothes: {
+            type: [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Clothes",
+                }
+            ],
+            required: true,
+            validate: {
+                validator: (clothes) => clothes.length > 1,
+                message: "Outfit must contain at least two clothes"
             }
-        ],
-
-        coverImage: {
-            url: String,
-            publicId: String,
-            size: Number,
-            width: Number,
-            height: Number
         },
 
         isFavorite: {
@@ -51,6 +50,7 @@ outfitSchema.index({
 })
 
 outfitSchema.index({
+    name: "text",
     notes: "text"
 })
 

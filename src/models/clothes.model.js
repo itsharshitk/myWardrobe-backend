@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const clothesSchema = new mongoose.Schema(
+const clothingSchema = new mongoose.Schema(
     {
         userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -11,58 +11,67 @@ const clothesSchema = new mongoose.Schema(
 
         name: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
 
         category: {
             type: String,
             required: true,
-            enum: ["Top", "Bottom", "Dress", "Outerwear", "Innerwear", "Footwear", "Accessories"],
+            enum: ["top", "bottom", "dress", "outerwear", "innerwear", "footwear", "accessories"],
         },
 
         color: {
             type: String,
             lowercase: true,
+            trim: true
         },
 
         brand: {
             type: String,
-            lowercase: true,
+            trim: true
         },
 
         size: String,
 
         season: {
             type: String,
-            enum: ["Summer", "Winter", "Spring", "Autumn", "All Season"],
-            default: "All Season",
+            enum: ["summer", "winter", "spring", "autumn", "all season"],
+            default: "all season",
         },
 
         occasion: {
             type: String,
-            enum: ["Casual", "Office", "Party", "Wedding", "Travel", "Gym"],
-            default: "Casual",
+            enum: ["casual", "office", "party", "wedding", "travel", "gym"],
+            default: "casual",
         },
 
         notes: String,
 
-        images: [
-            {
-                _id: false,
+        images: {
+            type: [
+                {
+                    _id: false,
 
-                url: {
-                    type: String,
-                    required: true
-                },
-                publicId: {
-                    type: String,
-                    required: true
-                },
-                size: Number,
-                width: Number,
-                height: Number
+                    url: {
+                        type: String,
+                        required: true
+                    },
+                    publicId: {
+                        type: String,
+                        required: true
+                    },
+                    size: Number,
+                    width: Number,
+                    height: Number
+                }
+            ],
+            required: true,
+            validate: {
+                validator: (images) => images.length > 0,
+                message: "Atleast one image is required"
             }
-        ],
+        },
 
         isFavorite: {
             type: Boolean,
@@ -109,4 +118,9 @@ clothesSchema.index({
     isFavorite: 1
 })
 
-export default mongoose.model("Clothes", clothesSchema);
+clothesSchema.index({
+    userId: 1,
+    name: "text"
+})
+
+export default mongoose.model("Clothing", clothingSchema);

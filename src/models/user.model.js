@@ -1,22 +1,28 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema(
     {
         firstName: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         lastName: {
             type: String,
+            trim: true
         },
         email: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
+            lowercase: true,
+            trim: true
         },
         password: {
             type: String,
-            required: true
+            required: true,
+            minlength: 6
         },
         profileImage: {
             url: String,
@@ -26,7 +32,10 @@ const userSchema = new mongoose.Schema(
             height: Number
         },
         
-        isEmailVerified: Boolean
+        isEmailVerified: {
+            type: Boolean,
+            default: false
+        }
     },
     {
         timestamps: true
@@ -34,9 +43,9 @@ const userSchema = new mongoose.Schema(
 )
 
 // Hash Password before saving
-userSchema.pre("save", function() {
+userSchema.pre("save", async function() {
     if(!this.isModified("password")){
-        return
+        return;
     }
 
     this.password = await bcrypt.hash(this.password, 10);
