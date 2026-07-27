@@ -16,16 +16,19 @@ const clothesSchema = new mongoose.Schema(
 
         category: {
             type: String,
+            required: true,
             enum: ["Top", "Bottom", "Dress", "Outerwear", "Innerwear", "Footwear", "Accessories"],
-            index: true
         },
 
         color: {
             type: String,
-            index: true
+            lowercase: true,
         },
 
-        brand: String,
+        brand: {
+            type: String,
+            lowercase: true,
+        },
 
         size: String,
 
@@ -33,14 +36,12 @@ const clothesSchema = new mongoose.Schema(
             type: String,
             enum: ["Summer", "Winter", "Spring", "Autumn", "All Season"],
             default: "All Season",
-            index: true
         },
 
         occasion: {
             type: String,
             enum: ["Casual", "Office", "Party", "Wedding", "Travel", "Gym"],
             default: "Casual",
-            index: true
         },
 
         notes: String,
@@ -65,8 +66,7 @@ const clothesSchema = new mongoose.Schema(
 
         isFavorite: {
             type: Boolean,
-            default: false,
-            index: true
+            default: false
         },
 
         isArchived: {
@@ -87,6 +87,26 @@ clothesSchema.index({
 clothesSchema.index({
     userId: 1,
     category: 1
+})
+
+clothesSchema.index({
+    userId: 1,
+    color: 1
+})
+
+clothesSchema.index({
+    userId: 1,
+    season: 1
+})
+
+clothesSchema.index({
+    userId: 1,
+    occasion: 1
+})
+
+clothesSchema.index({
+    userId: 1,
+    isFavorite: 1
 })
 
 export default mongoose.model("Clothes", clothesSchema);
