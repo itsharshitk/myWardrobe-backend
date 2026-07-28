@@ -16,6 +16,6 @@ export const validate = (schema) => {
 
         req.body = result.data;
 
-        next();
+        return next();
     }
 }
