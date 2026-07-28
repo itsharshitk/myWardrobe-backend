@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
-            minlength: 6
+            minlength: 8,
+            select: false
         },
         profileImage: {
             url: String,
