@@ -1,16 +1,56 @@
 import ApiError from "../utils/ApiError.js";
 import userRepository from "../repositories/user.repository.js";
+import tokenRepository from "../repositories/token.repository.js";
+import logger from "../config/logger.js";
+import { createAccessToken, createRefreshToken } from "../utils/token.js";
 
-const repo = new userRepository();
+const userRepo = new userRepository();
+const tokenRepo = new tokenRepository();
 
-export const register = async (data) => {
-    const userExist = await repo.findByEmail(data.email);
+const register = async (data) => {
+    const userExist = await userRepo.findByEmail(data.email);
 
     if(userExist) {
         throw new ApiError(409, "User already exists");
     }
 
-    const createdUser = await repo.create(data);
+    const createdUser = await userRepo.create(data);
+    
+    logger.info(`User Registered: ${createdUser.email}`);
 
     return createdUser
 }
+
+const login = async (data) => {
+    const user = await userRepo.findForLogin(data.email);
+    
+    if(!user){
+        throw new ApiError(401, "Invalid Credentials")
+    }
+
+    const verifyPass = await user.comparePassword(data.password);
+
+    if(!verifyPass){
+        throw new ApiError(401, "Invalid Credentials");
+    }
+
+    const accessToken = createAccessToken(user);
+    const refreshToken = createRefreshToken(user);
+
+    const token = await tokenRepo.create(user._id, refreshToken);
+
+    if(!token){
+        throw new ApiError(500, "Internal Server Error");
+    }
+
+    user.password = undefined;
+
+    return {
+        accessToken,
+        refreshToken,
+        user
+    }
+
+}
+
+export default {register, login}

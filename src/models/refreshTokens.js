@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import crypto from 'crypto';
 
 const refreshTokenSchema = new mongoose.Schema(
     {
@@ -7,7 +8,7 @@ const refreshTokenSchema = new mongoose.Schema(
             ref: "User",
             required: true
         },
-        token: {
+        refreshToken: {
             type: String,
             required: true,
             unique: true
@@ -24,5 +25,15 @@ const refreshTokenSchema = new mongoose.Schema(
         timestamps: true
     }
 )
+
+refreshTokenSchema.pre("save", function(){
+    if(!this.isModified("refreshToken")){
+        return
+    }
+    this.refreshToken = crypto
+    .createHash("sha256")
+    .update(this.refreshToken)
+    .digest("hex");
+});
 
 export default mongoose.model("RefreshToken", refreshTokenSchema);

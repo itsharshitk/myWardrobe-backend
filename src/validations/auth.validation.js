@@ -30,3 +30,22 @@ export const registerSchema = z.object(
             .regex(/[!@#$%^&*(),.?":{}|<>]/, "Must contain a special character")
     }
 )
+
+export const loginSchema = z.object(
+    {
+        email: z
+            .string()
+            .trim()
+            .toLowerCase()
+            .email("Invalid email address"),
+
+        password: z
+            .string()
+            .min(8, "Must contain minimum 8 characters")
+            .max(128)
+            .regex(/[A-Z]/, "Must contain an uppercase letter")
+            .regex(/[a-z]/, "Must contain a lowercase letter")
+            .regex(/[0-9]/, "Must contain a number")
+            .regex(/[!@#$%^&*(),.?":{}|<>]/, "Must contain a special character")
+    }
+)
