@@ -15,4 +15,8 @@ export default class UserRepository {
     async findForLogin(email) {
         return userModel.findOne({email}).select("+password");
     }
+
+    async findById(id) {
+        return userModel.findById(id);
+    }
 }

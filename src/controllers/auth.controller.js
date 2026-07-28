@@ -1,4 +1,5 @@
 import config from "../config/config.js";
+import logger from "../config/logger.js";
 import service from "../services/auth.service.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
@@ -26,5 +27,13 @@ export const loginUser = async (req, res) => {
 
     res.status(200).json(
         new ApiResponse(200, "Login Successful", {user: result.user, accessToken: result.accessToken})
+    )
+}
+
+export const refreshToken = async (req, res) => {
+    const token = await service.refreshToken(req.cookies.refreshToken);
+ 
+    res.status(201).json(
+        new ApiResponse(201, "Token Generated Successfully", {accessToken: token})
     )
 }

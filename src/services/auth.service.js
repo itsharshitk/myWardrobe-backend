@@ -3,6 +3,8 @@ import userRepository from "../repositories/user.repository.js";
 import tokenRepository from "../repositories/token.repository.js";
 import logger from "../config/logger.js";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
+import jwt from "jsonwebtoken";
+import config from "../config/config.js";
 
 const userRepo = new userRepository();
 const tokenRepo = new tokenRepository();
@@ -50,7 +52,18 @@ const login = async (data) => {
         refreshToken,
         user
     }
-
 }
 
-export default {register, login}
+const refreshToken = async (token) => {
+    const payload = jwt.verify(token, config.jwtRefresh);
+    
+    const user = await userRepo.findById(payload.id);
+
+    if(!user){
+        throw new ApiError(400, "Invalid Token");
+    }
+
+    return createAccessToken(user);
+}
+
+export default {register, login, refreshToken}
