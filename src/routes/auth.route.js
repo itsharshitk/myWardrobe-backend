@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validate } from "../middlewares/validation.middleware.js";
 import { loginSchema, registerSchema } from "../validations/auth.validation.js";
-import { loginUser, registerUser, refreshToken } from "../controllers/auth.controller.js";
+import { loginUser, registerUser, refreshToken, logoutUser } from "../controllers/auth.controller.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const router = Router();
@@ -21,6 +21,11 @@ router.post(
 router.post(
     "/refresh",
     asyncHandler(refreshToken),
+)
+
+router.post(
+    "/logout",
+    asyncHandler(logoutUser)
 )
 
 export default router;

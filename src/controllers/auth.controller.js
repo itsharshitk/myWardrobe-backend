@@ -31,9 +31,34 @@ export const loginUser = async (req, res) => {
 }
 
 export const refreshToken = async (req, res) => {
-    const token = await service.refreshToken(req.cookies.refreshToken);
+    const token = req.cookies.refreshToken;
+    if(!token){
+        res.status(404).json(
+            new ApiResponse(404, "Refresh token not found")
+        )
+    }
+    
+    const access = await service.refreshToken(token);
  
     res.status(201).json(
-        new ApiResponse(201, "Token Generated Successfully", {accessToken: token})
+        new ApiResponse(201, "Token Generated Successfully", {accessToken: access})
+    )
+}
+
+
+export const logoutUser = async (req, res) => {
+    const token = req.cookies.refreshToken;
+    if(!token){
+        res.status(404).json(
+            new ApiResponse(404, "Refresh token not found")
+        )
+    }
+
+    const logout = await service.logout(token);
+
+    res.clearCookie("refreshToken");
+
+    res.status(200).json(
+        new ApiResponse(200, "Logout Successful")
     )
 }

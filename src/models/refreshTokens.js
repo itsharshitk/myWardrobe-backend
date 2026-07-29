@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 const refreshTokenSchema = new mongoose.Schema(
     {

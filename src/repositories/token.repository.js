@@ -1,3 +1,4 @@
+import { refreshToken } from "../controllers/auth.controller.js"
 import RefreshTokens from "../models/refreshTokens.js"
 
 export default class TokenRepository{
@@ -8,5 +9,11 @@ export default class TokenRepository{
             refreshToken,
             expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000 )
         })
+    }
+
+    async deleteByToken(tokenHash) {
+        return await RefreshTokens.deleteOne(
+            {refreshToken: tokenHash}
+        )
     }
 }

@@ -1,10 +1,13 @@
+import jwt from "jsonwebtoken";
+import crypto from "node:crypto";
+
 import ApiError from "../utils/ApiError.js";
 import userRepository from "../repositories/user.repository.js";
 import tokenRepository from "../repositories/token.repository.js";
 import logger from "../config/logger.js";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
-import jwt from "jsonwebtoken";
 import config from "../config/config.js";
+
 
 const userRepo = new userRepository();
 const tokenRepo = new tokenRepository();
@@ -66,4 +69,10 @@ const refreshToken = async (token) => {
     return createAccessToken(user);
 }
 
-export default {register, login, refreshToken}
+const logout = async (token) => {
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+    return tokenRepo.deleteByToken(tokenHash);
+}
+
+export default {register, login, refreshToken, logout}
