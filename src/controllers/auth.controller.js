@@ -48,7 +48,7 @@ export const refreshToken = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
     const token = req.cookies.refreshToken;
-    logger.fatal(`========>>> ${token}`);
+    
     if(!token){
         res.status(404).json(
             new ApiResponse(404, "Refresh token not found")

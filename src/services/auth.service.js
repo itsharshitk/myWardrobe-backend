@@ -71,7 +71,6 @@ const refreshToken = async (token) => {
 
 const logout = async (token) => {
     const tokenHash = createHash(token);
-    logger.warn(`tokenHash is ${tokenHash}`);
 
     return tokenRepo.deleteByToken(tokenHash);
 }
