@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import crypto from 'node:crypto';
+import { createHash } from "../utils/createHash.js";
 
 const refreshTokenSchema = new mongoose.Schema(
     {
@@ -30,10 +30,7 @@ refreshTokenSchema.pre("save", function(){
     if(!this.isModified("refreshToken")){
         return
     }
-    this.refreshToken = crypto
-    .createHash("sha256")
-    .update(this.refreshToken)
-    .digest("hex");
+    this.refreshToken = createHash(this.refreshToken);
 });
 
 export default mongoose.model("RefreshToken", refreshTokenSchema);

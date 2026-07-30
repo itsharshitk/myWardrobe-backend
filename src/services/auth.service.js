@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import crypto from "node:crypto";
 
 import ApiError from "../utils/ApiError.js";
 import userRepository from "../repositories/user.repository.js";
@@ -7,6 +6,7 @@ import tokenRepository from "../repositories/token.repository.js";
 import logger from "../config/logger.js";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
 import config from "../config/config.js";
+import { createHash } from "../utils/createHash.js";
 
 
 const userRepo = new userRepository();
@@ -70,7 +70,8 @@ const refreshToken = async (token) => {
 }
 
 const logout = async (token) => {
-    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+    const tokenHash = createHash(token);
+    logger.warn(`tokenHash is ${tokenHash}`);
 
     return tokenRepo.deleteByToken(tokenHash);
 }
