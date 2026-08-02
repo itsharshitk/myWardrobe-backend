@@ -3,6 +3,7 @@ import { validate } from "../middlewares/validation.middleware.js";
 import { loginSchema, registerSchema } from "../validations/auth.validation.js";
 import { loginUser, registerUser, refreshToken, logoutUser } from "../controllers/auth.controller.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { auth } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -25,6 +26,7 @@ router.post(
 
 router.post(
     "/logout",
+    auth,
     asyncHandler(logoutUser)
 )
 
