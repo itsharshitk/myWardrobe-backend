@@ -7,19 +7,37 @@ import logger from "../config/logger.js";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
 import config from "../config/config.js";
 import { createHash } from "../utils/createHash.js";
+import processedBuffer from "../utils/processImage.js";
+import { upload } from "./upload.service.js";
 
 
 const userRepo = new userRepository();
 const tokenRepo = new tokenRepository();
 
-const register = async (data) => {
-    const userExist = await userRepo.findByEmail(data.email);
+const register = async (userData, file) => {
+    const userExist = await userRepo.findByEmail(userData.email);
 
     if(userExist) {
         throw new ApiError(409, "User already exists");
     }
 
-    const createdUser = await userRepo.create(data);
+    if(file) {
+        const processedFile = await processedBuffer(file); // Process with sharp
+
+        const uploadedImage = await upload(processedFile);
+
+        userData.profileImage = {
+            url: uploadedImage.secure_url,
+            publicId: uploadedImage.public_id,
+            size: uploadedImage.bytes,
+            width: uploadedImage.width,
+            height: uploadedImage.height
+        }
+        
+        logger.info(`Profile Image Saved: ${userData.profileImage.url}`);
+    }
+
+    const createdUser = await userRepo.create(userData);
     
     logger.info(`User Registered: ${createdUser.email}`);
 

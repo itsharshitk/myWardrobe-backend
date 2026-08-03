@@ -2,14 +2,7 @@ import multer from "multer";
 
 const storage = multer.memoryStorage();
 
-const upload = multer({
-    storage,
-    
-    limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB
-    },
-
-    fileFilter(req, file, cb) {
+const fileFilter = (req, file, cb) => {
         const allowedTypes = [
             "image/webp",
             "image/jpeg",
@@ -21,8 +14,16 @@ const upload = multer({
         } else {
             return cb(new Error("Only jpeg, png and webp images allowed"))
         }
-
     }
-})
+
+const upload = multer({
+    storage,
+    
+    limits: {
+        fileSize: 2 * 1024 * 1024 // 2MB
+    },
+
+    fileFilter
+});
 
 export default upload;
