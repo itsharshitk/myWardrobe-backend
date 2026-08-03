@@ -21,12 +21,14 @@ const register = async (userData, file) => {
         throw new ApiError(409, "User already exists");
     }
 
+    let profileImage = null;
+
     if(file) {
         const processedFile = await processedBuffer(file); // Process with sharp
 
         const uploadedImage = await uploadImage(processedFile);
 
-        userData.profileImage = {
+        profileImage = {
             url: uploadedImage.secure_url,
             publicId: uploadedImage.public_id,
             size: uploadedImage.bytes,
@@ -34,10 +36,10 @@ const register = async (userData, file) => {
             height: uploadedImage.height
         }
         
-        logger.info(`Profile Image Saved: ${userData.profileImage.url}`);
+        logger.info(`Profile Image Saved: ${profileImage.url}`);
     }
 
-    const createdUser = await userRepo.create(userData);
+    const createdUser = await userRepo.create({...userData, profileImage});
     
     logger.info(`User Registered: ${createdUser.email}`);
 
