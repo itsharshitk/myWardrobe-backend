@@ -10,8 +10,8 @@ const router = Router();
 
 router.post(
     "/register",
-    validate(registerSchema),
     upload.single("profileImage"),
+    validate(registerSchema),
     asyncHandler(registerUser)
 )
 

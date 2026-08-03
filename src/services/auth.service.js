@@ -8,7 +8,7 @@ import { createAccessToken, createRefreshToken } from "../utils/token.js";
 import config from "../config/config.js";
 import { createHash } from "../utils/createHash.js";
 import processedBuffer from "../utils/processImage.js";
-import { upload } from "./upload.service.js";
+import { uploadImage } from "./upload.service.js";
 
 
 const userRepo = new userRepository();
@@ -24,7 +24,7 @@ const register = async (userData, file) => {
     if(file) {
         const processedFile = await processedBuffer(file); // Process with sharp
 
-        const uploadedImage = await upload(processedFile);
+        const uploadedImage = await uploadImage(processedFile);
 
         userData.profileImage = {
             url: uploadedImage.secure_url,
