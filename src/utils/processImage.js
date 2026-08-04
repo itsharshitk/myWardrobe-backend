@@ -1,4 +1,5 @@
 import sharp from "sharp";
+import logger from "../config/logger.js";
 
 const processedBuffer = async (buffer) => {
     return await sharp(buffer)

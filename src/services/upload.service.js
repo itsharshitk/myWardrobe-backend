@@ -1,4 +1,4 @@
-import Readable from "stream";
+import { Readable } from "stream";
 import cloudinary from "../config/cloudinary.js";
 
 export const uploadImage = (buffer) => {
@@ -6,8 +6,9 @@ export const uploadImage = (buffer) => {
         const stream = cloudinary.uploader.upload_stream(
             {
                 folder: "wardrobe",
+                resource_type: "image",
                 timeout: 60 * 1000,
-                resource_type: "image"
+                connection_timeout: 10000
             },
             (error, result) => {
                 if(error) {
@@ -18,6 +19,7 @@ export const uploadImage = (buffer) => {
             }
         )
 
-        Readable.from(buffer).pipe(stream);
+        stream.end(buffer);
+        // Readable.from(buffer).pipe(stream);
     })
 }
