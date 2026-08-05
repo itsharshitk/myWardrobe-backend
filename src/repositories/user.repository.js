@@ -19,4 +19,11 @@ export default class UserRepository {
     async findById(id) {
         return userModel.findById(id);
     }
+
+    async updatePassword(id, newHash){
+        return userModel.updateOne(
+            {_id: id},
+            {$set: { password: newHash } }
+        )
+    }
 }

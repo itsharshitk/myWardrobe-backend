@@ -1,5 +1,4 @@
 import config from "../config/config.js";
-import logger from "../config/logger.js";
 import service from "../services/auth.service.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
@@ -45,6 +44,13 @@ export const refreshToken = async (req, res) => {
     )
 }
 
+export const resetPassword = async (req, res) => {
+    const result = await service.resetPassword(req.user, req.body.password);
+    
+    res.status(200).json(   
+        new ApiResponse(200, "Password Reset")
+    )
+}
 
 export const logoutUser = async (req, res) => {
     const token = req.cookies.refreshToken;

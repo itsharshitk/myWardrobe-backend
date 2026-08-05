@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validate } from "../middlewares/validation.middleware.js";
-import { loginSchema, registerSchema } from "../validations/auth.validation.js";
-import { loginUser, registerUser, refreshToken, logoutUser } from "../controllers/auth.controller.js";
+import { loginSchema, passwordSchema, registerSchema } from "../validations/auth.validation.js";
+import { loginUser, registerUser, refreshToken, logoutUser, resetPassword } from "../controllers/auth.controller.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { auth } from "../middlewares/auth.middleware.js";
 import upload from "../middlewares/upload.middleware.js";
@@ -24,6 +24,13 @@ router.post(
 router.post(
     "/refresh",
     asyncHandler(refreshToken),
+)
+
+router.post(
+    "/reset-password",
+    auth,
+    validate(passwordSchema),
+    asyncHandler(resetPassword)
 )
 
 router.post(

@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 import ApiError from "../utils/ApiError.js";
-import userRepository from "../repositories/user.repository.js";
-import tokenRepository from "../repositories/token.repository.js";
 import logger from "../config/logger.js";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
 import config from "../config/config.js";
@@ -10,6 +9,8 @@ import { createHash } from "../utils/createHash.js";
 import processedBuffer from "../utils/processImage.js";
 import { uploadImage } from "./upload.service.js";
 
+import userRepository from "../repositories/user.repository.js";
+import tokenRepository from "../repositories/token.repository.js";
 
 const userRepo = new userRepository();
 const tokenRepo = new tokenRepository();
@@ -92,7 +93,23 @@ const refreshToken = async (token) => {
 const logout = async (token) => {
     const tokenHash = createHash(token);
 
-    return tokenRepo.deleteByToken(tokenHash);
+    return await tokenRepo.deleteByToken(tokenHash);
 }
 
-export default {register, login, refreshToken, logout}
+
+const resetPassword = async (user, password) => {
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const updatedPassword = await userRepo.updatePassword(user.id, passwordHash)
+
+    if(updatedPassword.modifiedCount !== 1){
+        throw new ApiError(404, "User not found")
+    }
+    
+    logger.info(`Password Updated: ${JSON.stringify(updatedPassword)}`);
+    
+    return updatedPassword;
+}
+
+
+export default {register, login, refreshToken, resetPassword, logout}
