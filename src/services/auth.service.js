@@ -27,7 +27,7 @@ const register = async (userData, file) => {
         const processedFile = await processedBuffer(file.buffer); // Process with sharp
 
         const uploadedImage = await uploadImage(processedFile);
-        console.log("?>>>>>>>>>>>>>>>>>>>>>>>>>>>", uploadedImage);
+
         profileImage = {
             url: uploadedImage.secure_url,
             publicId: uploadedImage.public_id,

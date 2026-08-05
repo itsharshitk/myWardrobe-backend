@@ -19,7 +19,7 @@ export const uploadImage = (buffer) => {
             }
         )
 
-        stream.end(buffer);
-        // Readable.from(buffer).pipe(stream);
+        Readable.from(buffer).pipe(stream);
+        // stream.end(buffer);
     })
 }
