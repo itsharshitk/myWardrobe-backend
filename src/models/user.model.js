@@ -33,10 +33,10 @@ const userSchema = new mongoose.Schema(
             height: Number
         },
         
-        isEmailVerified: {
-            type: Boolean,
-            default: false
-        }
+        // isEmailVerified: {
+        //     type: Boolean,
+        //     default: false
+        // }
     },
     {
         timestamps: true

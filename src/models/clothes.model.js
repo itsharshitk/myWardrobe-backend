@@ -73,6 +73,11 @@ const clothingSchema = new mongoose.Schema(
             }
         },
 
+        aiGenerated: {
+            type: Boolean,
+            default: false
+        },
+
         isFavorite: {
             type: Boolean,
             default: false
