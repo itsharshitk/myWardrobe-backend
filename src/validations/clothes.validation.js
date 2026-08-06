@@ -8,18 +8,6 @@ export const clothesSchema = z.object(
             .min(1, "Name is required")
             .trim(),
 
-        clothesImage: z
-            .array(
-                z.object({
-                    url: z.string().url(1, "Invalid image URL"),
-                    publicId: z.string().min(1, "PublicId is required"),
-                    size: z.number().optional(),
-                    width: z.number().optional(),
-                    height: z.number().optional()
-                })
-            )
-            .min(1, "Atleast one image is required"),
-
         category: z.enum(CATEGORIES),
 
         color: z

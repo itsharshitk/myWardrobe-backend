@@ -13,7 +13,7 @@ const router = Router();
 router.post(
     "/clothes",
     auth,
-    upload.array("clothesImage"),
+    upload.array("clothesImage", 5),
     validate(clothesSchema),
     asyncHandler(clothesController.addClothes)
 )
