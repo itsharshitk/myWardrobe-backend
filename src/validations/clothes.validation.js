@@ -8,7 +8,7 @@ export const clothesSchema = z.object(
             .min(1, "Name is required")
             .trim(),
 
-        Images: z
+        clothesImage: z
             .array(
                 z.object({
                     url: z.string().url(1, "Invalid image URL"),
@@ -39,7 +39,7 @@ export const clothesSchema = z.object(
 
         season: z.enum(SEASONS).default(DEFAULT_SEASON),
 
-        ocassion: z.enum(OCCASIONS).default(DEFAULT_OCCASION),
+        occasion: z.enum(OCCASIONS).default(DEFAULT_OCCASION),
 
         notes: z.string().optional(),
 

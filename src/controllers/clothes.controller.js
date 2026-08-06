@@ -1,7 +1,9 @@
-import service from "../services/clothes.service.js";
+import clothesService from "../services/clothes.service.js";
 
 const addClothes = async (req, res) => {
-    const result = await service.addClothes(req.user, req.body, req.file);
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",req);
+
+    const result = await clothesService.add(req.user, req.body, req.file);
 
     console.log(result);
 }

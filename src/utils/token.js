@@ -25,7 +25,7 @@ export const createAccessToken = (user) => {
         config.jwtAccess,
 
         {
-            expiresIn: "15m"
+            expiresIn: "2h"
         }
     )
 }

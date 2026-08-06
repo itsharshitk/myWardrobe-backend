@@ -1,8 +1,10 @@
 import express, { json } from 'express';
+import cookieParser from 'cookie-parser';
+
 import httpLogger from './middlewares/logger.middleware.js';
 import authRoutes from './routes/auth.route.js';
+import clothesRoutes from './routes/clothes.route.js';
 import errorHandler from './middlewares/error.middleware.js';
-import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -14,10 +16,10 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", authRoutes);
 
-app.get("/", (req, res) => {
-    req.log.info("Home route called");
+app.use("/api/v1", clothesRoutes);
 
-    res.send("You are on HomePage for node app");
+app.get("/", (req, res) => {
+    res.send("Welcome to Wardrobe");
 })
 
 app.use(errorHandler);

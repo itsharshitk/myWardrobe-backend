@@ -16,7 +16,7 @@ const clothesSchema = new mongoose.Schema(
             trim: true
         },
 
-        images: {
+        clothesImage: {
             type: [
                 {
                     _id: false,
