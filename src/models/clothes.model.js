@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { CATEGORIES, DEFAULT_OCCASION, DEFAULT_SEASON, OCCASIONS, SEASONS } from "../constants/clothes.js";
 
-const clothingSchema = new mongoose.Schema(
+const clothesSchema = new mongoose.Schema(
     {
         userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -14,39 +15,6 @@ const clothingSchema = new mongoose.Schema(
             required: true,
             trim: true
         },
-
-        category: {
-            type: String,
-            required: true,
-            enum: ["top", "bottom", "dress", "outerwear", "innerwear", "footwear", "accessories"],
-        },
-
-        color: {
-            type: String,
-            lowercase: true,
-            trim: true
-        },
-
-        brand: {
-            type: String,
-            trim: true
-        },
-
-        size: String,
-
-        season: {
-            type: String,
-            enum: ["summer", "winter", "spring", "autumn", "all season"],
-            default: "all season",
-        },
-
-        occasion: {
-            type: String,
-            enum: ["casual", "office", "party", "wedding", "travel", "gym"],
-            default: "casual",
-        },
-
-        notes: String,
 
         images: {
             type: [
@@ -72,6 +40,39 @@ const clothingSchema = new mongoose.Schema(
                 message: "Atleast one image is required"
             }
         },
+
+        category: {
+            type: String,
+            required: true,
+            enum: CATEGORIES,
+        },
+
+        color: {
+            type: String,
+            lowercase: true,
+            trim: true
+        },
+
+        brand: {
+            type: String,
+            trim: true
+        },
+
+        size: String,
+
+        season: {
+            type: String,
+            enum: SEASONS,
+            default: DEFAULT_SEASON,
+        },
+
+        occasion: {
+            type: String,
+            enum: OCCASIONS,
+            default: DEFAULT_OCCASION,
+        },
+
+        notes: String,
 
         aiGenerated: {
             type: Boolean,
@@ -128,4 +129,4 @@ clothesSchema.index({
     name: "text"
 })
 
-export default mongoose.model("Clothing", clothingSchema);
+export default mongoose.model("Clothing", clothesSchema);

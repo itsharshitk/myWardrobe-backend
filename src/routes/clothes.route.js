@@ -1,13 +1,12 @@
 import { Router } from "express";
 
-import { clothesSchema } from "../validations/auth.validation.js";
+import { clothesSchema } from "../validations/clothes.validation.js";
 import clothesController from "../controllers/clothes.controller.js";
-import clothesModel from "../models/clothes.model.js";
 import auth from "../middlewares/auth.middleware.js";
 import validate from "../middlewares/validation.middleware.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
-const router = new Router();
+const router = Router();
 
 
 router.post(
@@ -31,3 +30,5 @@ router.post(
 // GET    /clothes/:id
 // PATCH  /clothes/:id
 // DELETE /clothes/:id
+
+export default router;
