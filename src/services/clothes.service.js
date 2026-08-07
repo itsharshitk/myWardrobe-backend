@@ -41,4 +41,8 @@ const add = async (user, body, files) => {
    
 }
 
-export default { add };
+const find = async (filters) => {
+    return clothesRepo.findByFilters(filters);
+}
+
+export default { add, find };

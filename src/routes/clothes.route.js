@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { clothesSchema, filterSchema } from "../validations/clothes.validation.js";
+import { clothesSchema } from "../validations/clothes.validation.js";
 import clothesController from "../controllers/clothes.controller.js";
 import auth from "../middlewares/auth.middleware.js";
 import validate from "../middlewares/validation.middleware.js";
@@ -21,7 +21,7 @@ router.post(
 router.get(
     "/clothes",
     auth,
-    validate(filterSchema),
+    // validate(filterSchema),
     asyncHandler(clothesController.getClothes)
 )
 

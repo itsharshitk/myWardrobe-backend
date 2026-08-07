@@ -29,7 +29,7 @@ const outfitSchema = new mongoose.Schema(
             }
         },
 
-        isFavorite: {
+        isFavourite: {
             type: Boolean,
             default: false
         },
@@ -46,7 +46,7 @@ const outfitSchema = new mongoose.Schema(
 
 outfitSchema.index({
     userId: 1,
-    isFavorite: 1
+    isFavourite: 1
 })
 
 outfitSchema.index({

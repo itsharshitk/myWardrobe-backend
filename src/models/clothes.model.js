@@ -79,7 +79,7 @@ const clothesSchema = new mongoose.Schema(
             default: false
         },
 
-        isFavorite: {
+        isFavourite: {
             type: Boolean,
             default: false
         },
@@ -126,7 +126,7 @@ clothesSchema.index({
 
 clothesSchema.index({
     userId: 1,
-    isFavorite: 1
+    isFavourite: 1
 })
 
 export default mongoose.model("Clothing", clothesSchema);
