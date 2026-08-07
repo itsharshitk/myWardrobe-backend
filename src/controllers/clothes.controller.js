@@ -9,4 +9,14 @@ const addClothes = async (req, res) => {
     )
 }
 
-export default {addClothes};
+const getClothes = async (req, res) => {
+    const filters = filterSchema.parse(req.query);
+
+    const result = await clothesService.find(req.user.id, filters)
+
+    res.status(200).json(
+        new ApiResponse(200, "Fetched clothes", result)
+    )
+}
+
+export default {addClothes, getClothes};

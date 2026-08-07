@@ -3,8 +3,10 @@ import cloudinary from "../config/cloudinary.js";
 import ApiError from "../utils/ApiError.js";
 import logger from "../config/logger.js";
 
-const uploadImage = (buffer, folder = "wardrobe") => {
+const uploadImage = (buffer, folderName = "") => {
     return new Promise((resolve, reject) => {
+        const folder = folderName ? `wardrobe/${folderName}` : "wardrobe";
+
         const stream = cloudinary.uploader.upload_stream(
             {
                 folder,

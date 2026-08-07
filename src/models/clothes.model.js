@@ -96,6 +96,11 @@ const clothesSchema = new mongoose.Schema(
 
 clothesSchema.index({
     userId: 1,
+    name: "text"
+})
+
+clothesSchema.index({
+    userId: 1,
     createdAt: -1
 })
 
@@ -122,11 +127,6 @@ clothesSchema.index({
 clothesSchema.index({
     userId: 1,
     isFavorite: 1
-})
-
-clothesSchema.index({
-    userId: 1,
-    name: "text"
 })
 
 export default mongoose.model("Clothing", clothesSchema);

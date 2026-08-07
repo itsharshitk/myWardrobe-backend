@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 import { CATEGORIES, DEFAULT_OCCASION, DEFAULT_SEASON, OCCASIONS, SEASONS } from "../constants/clothes.js";
 
 export const clothesSchema = z.object(
@@ -38,3 +38,36 @@ export const clothesSchema = z.object(
         isArchived: z.boolean().default(false)
     }
 )
+
+const booleanString = z.enum(["true", "false"]).transform(value => value === "true").optional();
+export const filterSchema = z.object(
+    {
+        name: z.string().trim().optional(),
+
+        category: z.enum(CATEGORIES).optional(),
+
+        color: z.string().trim().toLowerCase().optional(),
+        
+        brand: z.string().trim().optional(),
+
+        size: z.string().optional(),
+
+        season: z.enum(SEASONS).optional(),
+
+        occasion: z.enum(OCCASIONS).optional(),
+
+        ai: booleanString,
+
+        fav: booleanString,
+
+        archived: booleanString
+    }
+)
+.strict()
+.transform(({ ai, fav, archived, ...filters }) => ({
+    ...filters,
+
+    ...(ai !== undefined && { aiGenerated: ai }),
+    ...(fav !== undefined && { isFavorite: fav }),
+    ...(archived !== undefined && { isArchived: archived }),
+}));
