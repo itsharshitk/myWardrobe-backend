@@ -5,15 +5,11 @@ import ApiError from "../utils/ApiError.js";
 import logger from "../config/logger.js";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
 import config from "../config/config.js";
-import { createHash } from "../utils/createHash.js";
-import processedBuffer from "../utils/processImage.js";
-import { uploadImage } from "./upload.service.js";
-
-import userRepository from "../repositories/user.repository.js";
-import tokenRepository from "../repositories/token.repository.js";
-
-const userRepo = new userRepository();
-const tokenRepo = new tokenRepository();
+import createHash from "../utils/createHash.js";
+import processBuffer from "../utils/processImage.js";
+import uploadImage from "./upload.service.js";
+import userRepo from "../repositories/user.repository.js";
+import tokenRepo from "../repositories/token.repository.js";
 
 const register = async (userData, file) => {
     const userExist = await userRepo.findByEmail(userData.email);
@@ -25,7 +21,7 @@ const register = async (userData, file) => {
     let profileImage = null;
 
     if(file) {
-        const processedFile = await processedBuffer(file.buffer); // Process with sharp
+        const processedFile = await processBuffer(file.buffer); // Process with sharp
 
         const uploadedImage = await uploadImage(processedFile);
 

@@ -1,7 +1,7 @@
 import { refreshToken } from "../controllers/auth.controller.js"
 import RefreshTokens from "../models/refreshTokens.js"
 
-export default class TokenRepository{
+class TokenRepository{
 
     async create(userId, refreshToken) {        
         return await RefreshTokens.create({
@@ -17,3 +17,5 @@ export default class TokenRepository{
         )
     }
 }
+
+export default new TokenRepository();

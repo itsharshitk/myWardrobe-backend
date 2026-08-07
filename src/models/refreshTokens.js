@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { createHash } from "../utils/createHash.js";
+import createHash from "../utils/createHash.js";
 
 const refreshTokenSchema = new mongoose.Schema(
     {

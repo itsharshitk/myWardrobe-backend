@@ -1,6 +1,6 @@
 import userModel from "../models/user.model.js"
 
-export default class UserRepository {
+class UserRepository {
 
     async create(data) {
         const user = await userModel.create(data);
@@ -27,3 +27,5 @@ export default class UserRepository {
         )
     }
 }
+
+export default new UserRepository();
