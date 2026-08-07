@@ -6,8 +6,12 @@ class ClothesRepository {
         return clothesModel.create(data)
     }
 
-    async findByFilters(filters){
+    async filter(filters){
         return clothesModel.find(filters)
+    }
+
+    async findOneCloth(userId, id) {
+        return clothesModel.findOne({_id: id, userId});
     }
 
 }

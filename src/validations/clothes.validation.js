@@ -38,3 +38,10 @@ export const clothesSchema = z.object(
         isArchived: z.boolean().default(false)
     }
 )
+
+export const updateClothesSchema = clothesSchema.partial().extend({
+    
+    aiGenerated: z.preprocess((val) => val === 'true' || val === true, z.boolean()).optional(),
+    isFavourite: z.preprocess((val) => val === 'true' || val === true, z.boolean()).optional(),
+    isArchived: z.preprocess((val) => val === 'true' || val === true, z.boolean()).optional(),
+});

@@ -21,19 +21,26 @@ router.post(
 router.get(
     "/clothes",
     auth,
-    asyncHandler(clothesController.getClothes)
+    asyncHandler(clothesController.filterClothes)
+)
+
+router.get(
+    "/clothes/:id",
+    auth,
+    asyncHandler(clothesController.getClothesById)
+)
+
+router.patch(
+    "/clothes/:id",
+    auth,
+    upload.array("clothesImage", 5),
+    validate(updateClothesSchema),
+    asyncHandler(clothesController.updateCloth)
 )
 
 
 
 
-
-
-
-
-// POST   /clothes
-// GET    /clothes
-// GET    /clothes/:id
 // PATCH  /clothes/:id
 // DELETE /clothes/:id
 

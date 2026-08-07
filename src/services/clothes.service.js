@@ -4,6 +4,7 @@ import processBuffer from "../utils/processImage.js";
 import uploadImage from "./upload.service.js";
 import clothesRepo from "../repositories/clothes.repository.js";
 
+// Add new clothes
 const add = async (user, body, files) => {
     try{
         const uploadPromises = files.map(async (file) => { 
@@ -41,7 +42,8 @@ const add = async (user, body, files) => {
    
 }
 
-const find = async (userId, queryParams) => {
+// Fetch clothes based on Filters
+const findByFilters = async (userId, queryParams) => {
     const allowedFilters = [
         "name",
         "category",
@@ -72,7 +74,23 @@ const find = async (userId, queryParams) => {
         filters.isArchived = queryParams.archived === "true";
     }
 
-    return clothesRepo.findByFilters(filters);
+    return await clothesRepo.filter(filters);
 }
 
-export default { add, find };
+const findById = async (userId, id) => {
+    const clothes = await clothesRepo.findOneCloth(userId, id);
+
+    if(!clothes){
+        throw new ApiError(404, "No clothes found");
+    }
+    
+    return clothes;
+}
+
+const updateClothById = async (id, userId, body, files) => {
+    
+    const updatedcloth = await clothesRepo.updateOneCloth(id, userId)
+
+}
+
+export default { add, findByFilters, findById, updateClothById };
