@@ -7,12 +7,7 @@ class ClothesRepository {
     }
 
     async findByFilters(filters){
-        const query = clothesModel.find(filters);
-
-        // Inspect the filter object directly
-        console.log("Running filter =======>>>>>>>>", query.getQuery()); 
-
-        return await query;
+        return clothesModel.find(filters)
     }
 
 }

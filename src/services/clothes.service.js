@@ -41,7 +41,37 @@ const add = async (user, body, files) => {
    
 }
 
-const find = async (filters) => {
+const find = async (userId, queryParams) => {
+    const allowedFilters = [
+        "name",
+        "category",
+        "color",
+        "brand",
+        "size",
+        "season",
+        "occasion"
+    ];
+
+    const filters = {userId};
+
+    for(const key of allowedFilters){
+        if(queryParams[key] !== undefined){
+            filters[key] = queryParams[key]
+        }
+    }
+
+    if(queryParams.ai !== undefined){
+        filters.aiGenerated = queryParams.ai === "true";
+    }
+
+    if(queryParams.fav !== undefined){
+        filters.isFavourite = queryParams.fav === "true";
+    }
+
+    if(queryParams.archived !== undefined){
+        filters.isArchived = queryParams.archived === "true";
+    }
+
     return clothesRepo.findByFilters(filters);
 }
 

@@ -21,7 +21,6 @@ router.post(
 router.get(
     "/clothes",
     auth,
-    // validate(filterSchema),
     asyncHandler(clothesController.getClothes)
 )
 
