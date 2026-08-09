@@ -4,10 +4,10 @@ import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError.js";
 import logger from "../config/logger.js";
 import { createAccessToken, createRefreshToken } from "../utils/token.js";
+import { uploadImage } from "./upload.service.js";
 import config from "../config/config.js";
 import createHash from "../utils/createHash.js";
 import processBuffer from "../utils/processImage.js";
-import uploadImage from "./upload.service.js";
 import userRepo from "../repositories/user.repository.js";
 import tokenRepo from "../repositories/token.repository.js";
 

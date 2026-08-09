@@ -88,8 +88,15 @@ const findOneCloth = async (id, userId) => {
 }
 
 // Update Clothes
-const updateClothById = async (currentCloth, body, files) => {
+const updateClothById = async (id, userId, body, files) => {
     try{
+
+        const currentCloth = await clothesRepo.findById(id, userId);
+
+        if(!currentCloth){
+            throw new ApiError(404, "No clothes found");
+        }        
+
         // Separate keepImages from rest body data
         const {keepImages, ...updateData} = body; // remove keepImages from rest body
 
@@ -141,6 +148,10 @@ const updateClothById = async (currentCloth, body, files) => {
         const updatedClothes = await clothesRepo.updateById(currentCloth._id, updateData, {new: true});
 
         return updatedClothes;
+    } catch (error){
+        logger.error({ err: error }, "Failed to update clothes");
+
+        throw new ApiError(error.statusCode || 500, error.message || "Failed to update clothes");
     }
 }
 

@@ -46,9 +46,7 @@ const updateCloth = async (req, res) => {
         throw new ApiError(404, "No such clothes found");
     }
 
-    const currentCloth = await clothesService.findOneCloth(id, userId);
-
-    const result = await clothesService.updateClothById(currentCloth, req.body, req.files);
+    const result = await clothesService.updateClothById(id, userId, req.body, req.files);
  
     res.status(200).json(
         new ApiResponse(200, "Clothes updated successfully", result)

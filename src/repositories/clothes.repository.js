@@ -14,7 +14,12 @@ class ClothesRepository {
         return clothesModel.findOne({_id: id, userId});
     }
 
-    async updateById()
+    async updateById(id, data, options = {}){
+        return clothesModel.findByIdAndUpdate(id, data, {
+            runValidators: true,
+            ...options
+        })
+    }
 }
 
 export default new ClothesRepository();
