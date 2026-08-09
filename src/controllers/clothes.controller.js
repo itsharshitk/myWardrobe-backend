@@ -23,7 +23,7 @@ const filterClothes = async (req, res) => {
 }
 
 const getClothesById = async (req, res) => {
-    const { id } = req.params;
+    const id = req.params;
     const userId = req.user.id;
 
     // Prevent Mongoose CastError crash on malformed string IDs
@@ -31,7 +31,7 @@ const getClothesById = async (req, res) => {
         throw new ApiError(404, "No clothes found");
     }
     
-    const result = await clothesService.findById(userId, id);
+    const result = await clothesService.findOneCloth(id, userId);
     
     res.status(200).json(
         new ApiResponse(200, "Fetched clothes successfully", result)
@@ -39,13 +39,16 @@ const getClothesById = async (req, res) => {
 }
 
 const updateCloth = async (req, res) => {
-    const {id} = req.params;
+    const id = req.params;
+    const userId = req.user.id;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
         throw new ApiError(404, "No such clothes found");
     }
 
-    const result = await clothesService.updateClothById(id, req.user.id, req.body, req.files);
+    const currentCloth = await clothesService.findOneCloth(id, userId);
+
+    const result = await clothesService.updateClothById(currentCloth, req.body, req.files);
  
     res.status(200).json(
         new ApiResponse(200, "Clothes updated successfully", result)

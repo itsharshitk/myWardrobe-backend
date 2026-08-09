@@ -3,7 +3,7 @@ import cloudinary from "../config/cloudinary.js";
 import ApiError from "../utils/ApiError.js";
 import logger from "../config/logger.js";
 
-const uploadImage = (buffer, folderName = "") => {
+export const uploadImage = (buffer, folderName = "") => {
     return new Promise((resolve, reject) => {
         const folder = folderName ? `wardrobe/${folderName}` : "wardrobe";
 
@@ -29,4 +29,10 @@ const uploadImage = (buffer, folderName = "") => {
     })
 }
 
-export default uploadImage;
+export const deleteImage = async (publicId) => {
+    try {
+        return await cloudinary.uploader.destroy(publicId);
+    } catch (error) {
+        throw new Error(`Failed to delete image: ${publicId}`);
+    }
+};

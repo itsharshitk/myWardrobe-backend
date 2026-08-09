@@ -40,7 +40,14 @@ export const clothesSchema = z.object(
 )
 
 export const updateClothesSchema = clothesSchema.partial().extend({
-    
+    keepImages: z.preprocess(
+    (val) => {
+      if (val === undefined) return [];
+      return Array.isArray(val) ? val : [val];
+    },
+    z.array(z.string())
+  ),
+
     aiGenerated: z.preprocess((val) => val === 'true' || val === true, z.boolean()).optional(),
     isFavourite: z.preprocess((val) => val === 'true' || val === true, z.boolean()).optional(),
     isArchived: z.preprocess((val) => val === 'true' || val === true, z.boolean()).optional(),

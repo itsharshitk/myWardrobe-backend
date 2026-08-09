@@ -10,10 +10,11 @@ class ClothesRepository {
         return clothesModel.find(filters)
     }
 
-    async findOneCloth(userId, id) {
+    async findById(id, userId) {
         return clothesModel.findOne({_id: id, userId});
     }
 
+    async updateById()
 }
 
 export default new ClothesRepository();

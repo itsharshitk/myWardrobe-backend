@@ -1,13 +1,13 @@
 import logger from "../config/logger.js";
 import ApiError from "../utils/ApiError.js";
 import processBuffer from "../utils/processImage.js";
-import uploadImage from "./upload.service.js";
+import {uploadImage, deleteImage} from "./upload.service.js";
 import clothesRepo from "../repositories/clothes.repository.js";
 
 // Add new clothes
 const add = async (user, body, files) => {
     try{
-        const uploadPromises = files.map(async (file) => { 
+        const uploadPromises = files.map(async (file) => {
             const processedBuffer = await processBuffer(file.buffer); // processing with sharp
             
             return uploadImage(processedBuffer, "clothes");
@@ -77,8 +77,8 @@ const findByFilters = async (userId, queryParams) => {
     return await clothesRepo.filter(filters);
 }
 
-const findById = async (userId, id) => {
-    const clothes = await clothesRepo.findOneCloth(userId, id);
+const findOneCloth = async (id, userId) => {
+    const clothes = await clothesRepo.findById(id, userId);
 
     if(!clothes){
         throw new ApiError(404, "No clothes found");
@@ -87,10 +87,61 @@ const findById = async (userId, id) => {
     return clothes;
 }
 
-const updateClothById = async (id, userId, body, files) => {
-    
-    const updatedcloth = await clothesRepo.updateOneCloth(id, userId)
+// Update Clothes
+const updateClothById = async (currentCloth, body, files) => {
+    try{
+        // Separate keepImages from rest body data
+        const {keepImages, ...updateData} = body; // remove keepImages from rest body
 
+        const existingImages = currentCloth.clothesImage || [];
+
+        // Match with existing images
+        const keptImages = existingImages.filter((img) => {
+            keepImages.includes(img.publicId)
+        });
+
+        const removedImages = existingImages.filter((img) => {
+            !keepImages.includes(img.publicId)
+        })
+
+        // Deleting removed images from Cloudinary
+        if(removedImages.length){
+            await Promise.all(
+                removedImages.map((img) =>{
+                    deleteImage(img.publicId)
+                })
+            )
+        }
+
+        const newImages = [];
+
+        if(files.length){
+            const uploadPromises = files.map(async (file) => {
+                const processedBuffer = await processBuffer(file.buffer); // processing with sharp
+                
+                return uploadImage(processedBuffer, "clothes");
+            });
+
+            const uploadedImages = await Promise.all(uploadPromises);
+
+            newImages = uploadedImages.map((img) => ({
+                url: img.secure_url,
+                publicId: img.public_id,
+                size: img.bytes,
+                width: img.width,
+                height: img.height
+            }));
+        }
+
+        updateData.clothesImage = [
+            ...keptImages,
+            ...newImages
+        ]
+
+        const updatedClothes = await clothesRepo.updateById(currentCloth._id, updateData, {new: true});
+
+        return updatedClothes;
+    }
 }
 
-export default { add, findByFilters, findById, updateClothById };
+export default { add, findByFilters, findOneCloth, updateClothById };
