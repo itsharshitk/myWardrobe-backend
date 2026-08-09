@@ -90,39 +90,15 @@ const findOneCloth = async (id, userId) => {
 // Update Clothes
 const updateClothById = async (id, userId, body, files) => {
     try{
-
         const currentCloth = await clothesRepo.findById(id, userId);
 
         if(!currentCloth){
             throw new ApiError(404, "No clothes found");
         }        
 
-        // Separate keepImages from rest body data
-        const {keepImages, ...updateData} = body; // remove keepImages from rest body
+        let newImages = [];
 
-        const existingImages = currentCloth.clothesImage || [];
-
-        // Match with existing images
-        const keptImages = existingImages.filter((img) => {
-            keepImages.includes(img.publicId)
-        });
-
-        const removedImages = existingImages.filter((img) => {
-            !keepImages.includes(img.publicId)
-        })
-
-        // Deleting removed images from Cloudinary
-        if(removedImages.length){
-            await Promise.all(
-                removedImages.map((img) =>{
-                    deleteImage(img.publicId)
-                })
-            )
-        }
-
-        const newImages = [];
-
-        if(files.length){
+        if(files?.length){
             const uploadPromises = files.map(async (file) => {
                 const processedBuffer = await processBuffer(file.buffer); // processing with sharp
                 
@@ -140,12 +116,35 @@ const updateClothById = async (id, userId, body, files) => {
             }));
         }
 
+        // Separate keepImages from rest body data
+        const {keepImages, ...updateData} = body; // remove keepImages from rest body
+
+        const existingImages = currentCloth.clothesImage || [];
+
+        // Match with existing images
+        const keptImages = existingImages.filter((img) => {
+            return keepImages.includes(img.publicId)
+        });
+
+        const removedImages = existingImages.filter((img) => {
+            return !keepImages.includes(img.publicId)
+        })
+
+        // Deleting removed images from Cloudinary
+        if(removedImages.length){
+            await Promise.all(
+                removedImages.map((img) =>{
+                    return deleteImage(img.publicId)
+                })
+            )
+        }
+
         updateData.clothesImage = [
             ...keptImages,
             ...newImages
         ]
 
-        const updatedClothes = await clothesRepo.updateById(currentCloth._id, updateData, {new: true});
+        const updatedClothes = await clothesRepo.updateById(currentCloth._id, updateData, {returnDocument: "after"});
 
         return updatedClothes;
     } catch (error){

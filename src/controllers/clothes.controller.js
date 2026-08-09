@@ -23,7 +23,7 @@ const filterClothes = async (req, res) => {
 }
 
 const getClothesById = async (req, res) => {
-    const id = req.params;
+    const { id } = req.params;
     const userId = req.user.id;
 
     // Prevent Mongoose CastError crash on malformed string IDs
@@ -39,7 +39,7 @@ const getClothesById = async (req, res) => {
 }
 
 const updateCloth = async (req, res) => {
-    const id = req.params;
+    const { id } = req.params;
     const userId = req.user.id;
 
     if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
