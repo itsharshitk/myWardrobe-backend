@@ -15,6 +15,10 @@ const filterClothes = async (req, res) => {
     const userId = req.user.id;
     const queryParams = req.query;
 
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new ApiError(404, "No clothes found");
+    }
+
     const result = await clothesService.findByFilters(userId, queryParams);
 
     res.status(200).json(
@@ -27,7 +31,7 @@ const getClothesById = async (req, res) => {
     const userId = req.user.id;
 
     // Prevent Mongoose CastError crash on malformed string IDs
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
         throw new ApiError(404, "No clothes found");
     }
     
@@ -38,7 +42,7 @@ const getClothesById = async (req, res) => {
     )
 }
 
-const updateCloth = async (req, res) => {
+const updateClothes = async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
 
@@ -54,4 +58,20 @@ const updateCloth = async (req, res) => {
 
 }
 
-export default {addClothes, filterClothes, getClothesById, updateCloth};
+
+const deleteClothes = async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
+        throw new ApiError(404, "No such clothes found");
+    }
+
+    const result = await clothesService.deleteClothesById(id, userId)
+
+    res.status(204).json(
+        new ApiResponse(204, "Clothes deleted successfully")
+    )
+}
+
+export default {addClothes, filterClothes, getClothesById, updateClothes, deleteClothes};

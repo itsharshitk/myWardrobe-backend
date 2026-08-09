@@ -35,13 +35,16 @@ router.patch(
     auth,
     upload.array("clothesImage", 5),
     validate(updateClothesSchema),
-    asyncHandler(clothesController.updateCloth)
+    asyncHandler(clothesController.updateClothes)
+)
+
+router.delete(
+    "/clothes/:id",
+    auth,
+    asyncHandler(clothesController.deleteClothes)
 )
 
 
-
-
-// PATCH  /clothes/:id
 // DELETE /clothes/:id
 
 export default router;

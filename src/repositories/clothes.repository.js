@@ -20,6 +20,13 @@ class ClothesRepository {
             ...options
         })
     }
+
+    async deleteByIdAndUser(id, userId) {
+        return clothesModel.findOneAndDelete({
+            _id: id,
+            userId
+        });
+    }
 }
 
 export default new ClothesRepository();

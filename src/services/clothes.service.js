@@ -77,6 +77,7 @@ const findByFilters = async (userId, queryParams) => {
     return await clothesRepo.filter(filters);
 }
 
+// Fetch clothes based on Id
 const findOneCloth = async (id, userId) => {
     const clothes = await clothesRepo.findById(id, userId);
 
@@ -154,4 +155,27 @@ const updateClothById = async (id, userId, body, files) => {
     }
 }
 
-export default { add, findByFilters, findOneCloth, updateClothById };
+
+// Delete clothes By Id
+const deleteClothesById = async (id, userId) => {
+    const currentCloth = await clothesRepo.findById(id, userId);
+
+    if(!currentCloth){
+        throw new ApiError(404, "No clothes found");
+    }
+
+    const existingImages = currentCloth.clothesImage || [];
+
+    // Deleting images from Cloudinary
+    if(existingImages.length){
+        await Promise.all(
+            existingImages.map((img) => deleteImage(img.publicId))
+        )
+    }
+
+    const deletedClothes = await clothesRepo.deleteByIdAndUser(id, userId);
+
+    return deletedClothes;
+}
+
+export default { add, findByFilters, findOneCloth, updateClothById, deleteClothesById };
