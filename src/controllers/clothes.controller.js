@@ -67,11 +67,9 @@ const deleteClothes = async (req, res) => {
         throw new ApiError(404, "No such clothes found");
     }
 
-    const result = await clothesService.deleteClothesById(id, userId)
+    await clothesService.deleteClothesById(id, userId)
 
-    res.status(204).json(
-        new ApiResponse(204, "Clothes deleted successfully")
-    )
+    return res.status(204).send()
 }
 
 export default {addClothes, filterClothes, getClothesById, updateClothes, deleteClothes};

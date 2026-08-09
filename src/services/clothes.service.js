@@ -158,22 +158,31 @@ const updateClothById = async (id, userId, body, files) => {
 
 // Delete clothes By Id
 const deleteClothesById = async (id, userId) => {
-    const currentCloth = await clothesRepo.findById(id, userId);
+    const deletedClothes = await clothesRepo.deleteByIdAndUser(id, userId);
 
-    if(!currentCloth){
+    if(!deletedClothes){
         throw new ApiError(404, "No clothes found");
     }
 
-    const existingImages = currentCloth.clothesImage || [];
+    const images = deletedClothes.clothesImage || [];
 
-    // Deleting images from Cloudinary
-    if(existingImages.length){
-        await Promise.all(
-            existingImages.map((img) => deleteImage(img.publicId))
-        )
+    // Cleanup images from Cloudinary
+    if(images.length){
+        const results = await Promise.allSettled(
+            images.map((img) => deleteImage(img.publicId))
+        );
+
+        const failed = results.filter((result) => result.status === "rejected");
+
+        if(failed.length){
+            logger.error("Cloudinary images cleanup failed", {
+                clothesId: id,
+                userId,
+                failedCount: failed.length,
+                errors: failed.map((result) => result.reason),
+            });
+        }
     }
-
-    const deletedClothes = await clothesRepo.deleteByIdAndUser(id, userId);
 
     return deletedClothes;
 }
