@@ -6,6 +6,7 @@ import auth from "../middlewares/auth.middleware.js";
 import validate from "../middlewares/validation.middleware.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import upload from "../middlewares/upload.middleware.js";
+import pagination from "../middlewares/pagination.middleware.js";
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.post(
 router.get(
     "/clothes",
     auth,
+    pagination,
     asyncHandler(clothesController.filterClothes)
 )
 

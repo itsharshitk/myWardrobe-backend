@@ -43,7 +43,7 @@ const add = async (user, body, files) => {
 }
 
 // Fetch clothes based on Filters
-const findByFilters = async (userId, queryParams) => {
+const findByFilters = async (userId, queryParams, pagination) => {
     const allowedFilters = [
         "name",
         "category",
@@ -74,7 +74,7 @@ const findByFilters = async (userId, queryParams) => {
         filters.isArchived = queryParams.archived === "true";
     }
 
-    return await clothesRepo.filter(filters);
+    return await clothesRepo.findPaginated(filters, pagination);
 }
 
 // Fetch clothes based on Id

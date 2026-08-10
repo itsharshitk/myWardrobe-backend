@@ -14,12 +14,9 @@ const addClothes = async (req, res) => {
 const filterClothes = async (req, res) => {
     const userId = req.user.id;
     const queryParams = req.query;
+    const pagination = req.pagination;
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-        throw new ApiError(404, "No clothes found");
-    }
-
-    const result = await clothesService.findByFilters(userId, queryParams);
+    const result = await clothesService.findByFilters(userId, queryParams, pagination);
 
     res.status(200).json(
         new ApiResponse(200, "Fetched clothes", result)
@@ -31,7 +28,7 @@ const getClothesById = async (req, res) => {
     const userId = req.user.id;
 
     // Prevent Mongoose CastError crash on malformed string IDs
-    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         throw new ApiError(404, "No clothes found");
     }
     
@@ -46,7 +43,7 @@ const updateClothes = async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
 
-    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         throw new ApiError(404, "No such clothes found");
     }
 
@@ -63,7 +60,7 @@ const deleteClothes = async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
 
-    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         throw new ApiError(404, "No such clothes found");
     }
 
