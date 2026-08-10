@@ -118,3 +118,4 @@ const result = await analyzeClothing(
 );
 
 console.log(result);
+https://stytch.com/v1/magic_links/redirect?public_token=public-token-live-58df57a9-a1f5-4066-bc0c-2ff942db684f&stytch_token_type=discovery&token=vLf0H7hz0BV-aIQmhqLVvwOBwrv1cFV07Ewpf027THPi
