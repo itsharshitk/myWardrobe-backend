@@ -1,11 +1,16 @@
-import openai from "./openai.js";
+import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod.js";
-import { aiClothingSchema } from "../validations/aiClothing.validation.js";
+import { aiClothingSchema } from "./validations/aiClothing.validation.js";
+import config from "./config/config.js";
 
-export const analyzeClothing = async (imageUrl) => {
+const openai = new OpenAI({
+  apiKey: config.openAiKey
+});
+
+const analyzeClothing = async (imageUrl) => {
     const resp = await openai.responses.parse({
         model: "gpt-4.1-mini",
-        
+
         input: [
             {
                 role: "user",
@@ -44,3 +49,6 @@ export const analyzeClothing = async (imageUrl) => {
 
     return resp.output_parsed;
 }
+
+const r = await analyzeClothing("https://images.unsplash.com/photo-1779896412190-49a2fd05bd74");
+console.log(r);
