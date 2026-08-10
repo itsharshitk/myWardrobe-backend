@@ -3,7 +3,7 @@ import openai from "./openai.js";
 export const analyzeClothing = async (imageUrl) => {
     const resp = await openai.responses.create({
         model: "gpt-4.1-mini",
-        imput: [
+        input: [
             {
                 role: "user",
                 content: [
