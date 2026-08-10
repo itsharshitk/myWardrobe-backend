@@ -3,6 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import processBuffer from "../utils/processImage.js";
 import {uploadImage, deleteImage} from "./upload.service.js";
 import clothesRepo from "../repositories/clothes.repository.js";
+import createPaginationMeta from "../utils/paginationMeta.js";
 
 // Add new clothes
 const add = async (user, body, files) => {
@@ -74,7 +75,18 @@ const findByFilters = async (userId, queryParams, pagination) => {
         filters.isArchived = queryParams.archived === "true";
     }
 
-    return await clothesRepo.findPaginated(filters, pagination);
+    const {items, hasNextPage} = await clothesRepo.findPaginated(filters, pagination);
+
+    const paginationMeta = createPaginationMeta({
+        page: pagination.page,
+        limit: pagination.limit,
+        hasNextPage
+    });
+
+    return {
+        clothes: items,
+        pagination: paginationMeta
+    }
 }
 
 // Fetch clothes based on Id
