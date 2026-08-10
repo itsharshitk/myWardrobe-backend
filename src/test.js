@@ -50,5 +50,5 @@ const analyzeClothing = async (imageUrl) => {
     return resp.output_parsed;
 }
 
-const r = await analyzeClothing("https://images.unsplash.com/photo-1779896412190-49a2fd05bd74");
+const r = await analyzeClothing("https://res.cloudinary.com/dpmmkhbub/image/upload/v1786282200/wardrobe/clothes/qrvmmbuyqtokye5olfqf.jpg");
 console.log(r);

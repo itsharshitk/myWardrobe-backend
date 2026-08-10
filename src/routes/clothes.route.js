@@ -46,7 +46,12 @@ router.delete(
     asyncHandler(clothesController.deleteClothes)
 )
 
+router.post(
+    "/clothes/analyze",
+    auth,
+    upload.single("clothesImage"),
+    asyncHandler(clothesController.analyzeClothes)
+)
 
-// DELETE /clothes/:id
 
 export default router;

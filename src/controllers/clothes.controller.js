@@ -69,4 +69,8 @@ const deleteClothes = async (req, res) => {
     return res.status(204).send()
 }
 
-export default {addClothes, filterClothes, getClothesById, updateClothes, deleteClothes};
+const analyzeClothes = async (req, res) => {
+    
+}
+
+export default {addClothes, filterClothes, getClothesById, updateClothes, deleteClothes, analyzeClothes};

@@ -7,7 +7,6 @@ const openAiKey = process.env.OPENAI_API_KEY?.trim();
 //     throw new Error('OPENAI_API_KEY is missing or empty');
 // }
 
-
 const config = {
     port: process.env.PORT,
 
@@ -26,6 +25,8 @@ const config = {
     cloudinarySecret: process.env.CLOUDINARY_SECRET,
 
     openAiKey,
+
+    groqModel: process.env.GROQ_MODEL,
 }
 
 export default config;

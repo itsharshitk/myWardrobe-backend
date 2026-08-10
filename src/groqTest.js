@@ -114,8 +114,7 @@ function zodToJsonSchema(schema) {
 }
 
 const result = await analyzeClothing(
-    "https://images.unsplash.com/photo-1779896412190-49a2fd05bd74"
+    "https://res.cloudinary.com/dpmmkhbub/image/upload/v1786282200/wardrobe/clothes/qrvmmbuyqtokye5olfqf.jpg"
 );
 
 console.log(result);
-https://stytch.com/v1/magic_links/redirect?public_token=public-token-live-58df57a9-a1f5-4066-bc0c-2ff942db684f&stytch_token_type=discovery&token=vLf0H7hz0BV-aIQmhqLVvwOBwrv1cFV07Ewpf027THPi
