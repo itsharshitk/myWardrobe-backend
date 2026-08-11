@@ -4,6 +4,7 @@ import processBuffer from "../utils/processImage.js";
 import {uploadImage, deleteImage} from "./upload.service.js";
 import clothesRepo from "../repositories/clothes.repository.js";
 import createPaginationMeta from "../utils/paginationMeta.js";
+import visionService from "../ai/vision.service.js";
 
 // Add new clothes
 const add = async (user, body, files) => {
@@ -199,4 +200,23 @@ const deleteClothesById = async (id, userId) => {
     return deletedClothes;
 }
 
-export default { add, findByFilters, findOneCloth, updateClothById, deleteClothesById };
+const analyzeClothing = async (fileBuffer) => {
+    let uploadedImg;
+    try{
+        const processedBuff = await processBuffer(fileBuffer);
+        uploadedImg = await uploadImage(processedBuff);
+        
+        const analyzedData = await visionService.analyzeClothing(uploadedImg.secure_url);
+        
+        return analyzedData;
+    } catch(error) {
+        
+        if(uploadedImg?.public_id){
+            await deleteImage(uploadedImg.public_id)
+        }
+
+        throw error;
+    }
+}
+
+export default { add, findByFilters, findOneCloth, updateClothById, deleteClothesById, analyzeClothing };

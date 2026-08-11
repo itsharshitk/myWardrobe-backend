@@ -69,8 +69,18 @@ const deleteClothes = async (req, res) => {
     return res.status(204).send()
 }
 
-const analyzeClothes = async (req, res) => {
-    
+const analyzeClothing = async (req, res) => {
+    const file = req.file;
+
+    if(!file){
+        throw new ApiError(400, "Image is required")
+    }
+
+    const result = await clothesService.analyzeClothing(file.buffer);
+
+    res.status(200).json(
+        new ApiResponse(200, "Clothing analyzed successfully", result)
+    );
 }
 
-export default {addClothes, filterClothes, getClothesById, updateClothes, deleteClothes, analyzeClothes};
+export default {addClothes, filterClothes, getClothesById, updateClothes, deleteClothes, analyzeClothing};

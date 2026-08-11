@@ -1,10 +1,9 @@
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod.js";
 import { aiClothingSchema } from "./validations/aiClothing.validation.js";
-import config from "./config/config.js";
 
 const openai = new OpenAI({
-  apiKey: config.openAiKey
+  apiKey: "your_key_here"
 });
 
 const analyzeClothing = async (imageUrl) => {

@@ -2,7 +2,7 @@ import openai from "./openai.js";
 import { zodTextFormat } from "openai/helpers/zod.js";
 import { aiClothingSchema } from "../validations/aiClothing.validation.js";
 
-export const analyzeClothing = async (imageUrl) => {
+const analyzeClothing = async (imageUrl) => {
     const resp = await openai.responses.parse({
         model: "gpt-4.1-mini",
         
@@ -44,3 +44,5 @@ export const analyzeClothing = async (imageUrl) => {
 
     return resp.output_parsed;
 }
+
+export default { analyzeClothing };

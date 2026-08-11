@@ -50,7 +50,7 @@ router.post(
     "/clothes/analyze",
     auth,
     upload.single("clothesImage"),
-    asyncHandler(clothesController.analyzeClothes)
+    asyncHandler(clothesController.analyzeClothing)
 )
 
 

@@ -1,10 +1,9 @@
 import OpenAI from "openai";
 import { z } from "zod";
-import config from "./config/config.js";
 import { aiClothingSchema } from "./validations/aiClothing.validation.js";
 
 const groq = new OpenAI({
-    apiKey: config.groqKey,
+    apiKey: "your_key_here",
     baseURL: "https://api.groq.com/openai/v1",
 });
 
