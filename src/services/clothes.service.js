@@ -208,11 +208,18 @@ const analyzeClothing = async (fileBuffer) => {
         
         const analyzedData = await visionService.analyzeClothing(uploadedImg.secure_url);
         
-        return analyzedData;
+        return {
+            imageUrl: uploadedImg.secure_url,
+            publicId: uploadedImg.public_id,
+            data: analyzedData
+        };
     } catch(error) {
-        
-        if(uploadedImg?.public_id){
-            await deleteImage(uploadedImg.public_id)
+        if (uploadedImg?.public_id) {
+            try {
+                await deleteImage(uploadedImg.public_id);
+            } catch (cleanupError) {
+                logger.error(cleanupError);
+            }
         }
 
         throw error;
