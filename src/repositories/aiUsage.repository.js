@@ -1,3 +1,11 @@
+import AIUsage from '../models/aiUsage.model.js';
+
+const create = async (userId, data) => {
+    data.userId = userId;
+    
+    return AIUsage.create(data);
+}
+
 const findByUserId = async (userId) => {
     return AIUsage.find({ userId })
         .sort({ createdAt: -1 });

@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const aiUsageSchema = new mongoose.Schema(
     {
         userId: {
@@ -7,11 +9,11 @@ const aiUsageSchema = new mongoose.Schema(
             index: true
         },
 
-        clothingId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Clothing",
-            index: true
-        },
+        // clothingId: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: "Clothing",
+        //     index: true
+        // },
 
         operation: {
             type: String,
@@ -71,3 +73,5 @@ const aiUsageSchema = new mongoose.Schema(
 );
 
 const AIUsage = mongoose.model("AIUsage", aiUsageSchema);
+
+export default AIUsage;
