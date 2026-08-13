@@ -76,7 +76,7 @@ const analyzeClothing = async (req, res) => {
         throw new ApiError(400, "Image is required")
     }
 
-    const result = await clothesService.analyzeClothing(file.buffer);
+    const result = await clothesService.analyzeClothing(file.buffer, req.user.id);
 
     res.status(200).json(
         new ApiResponse(200, "Clothing analyzed successfully", result)

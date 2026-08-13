@@ -201,13 +201,15 @@ const deleteClothesById = async (id, userId) => {
     return deletedClothes;
 }
 
-const analyzeClothing = async (fileBuffer) => {
+const analyzeClothing = async (fileBuffer, userId) => {
     let uploadedImg;
     try{
         const processedBuff = await processBuffer(fileBuffer);
         uploadedImg = await uploadImage(processedBuff);
         
         const analyzedData = await visionService.analyzeClothing(uploadedImg.secure_url);
+
+        await aiUsageRepository.create(userId, analyzedData.usage);
         
         return {
             imageUrl: uploadedImg.secure_url,
