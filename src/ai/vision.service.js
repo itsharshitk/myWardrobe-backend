@@ -42,7 +42,39 @@ const analyzeClothing = async (imageUrl) => {
         }
     });
 
-    return resp.output_parsed;
+    const usage = resp.usage;
+
+    const inputTokens = usage?.input_tokens ?? 0;
+    const outputTokens = usage?.output_tokens ?? 0;
+    const totalTokens = usage?.total_tokens ?? 0;
+
+    const inputCost =
+        (inputTokens / 1_000_000) * 0.40;
+
+    const outputCost =
+        (outputTokens / 1_000_000) * 1.60;
+
+    return {
+        data: resp.output_parsed,
+
+        usage: {
+            operation: "clothing_analysis",
+            model: "gpt-4.1-mini",
+
+            inputTokens,
+            outputTokens,
+            totalTokens,
+
+            inputCost,
+            outputCost,
+            totalCost: inputCost + outputCost,
+
+            currency: "USD",
+
+            // Save exactly what OpenAI returned
+            rawUsage: usage
+        }
+    };
 }
 
 export default { analyzeClothing };

@@ -3,6 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import processBuffer from "../utils/processImage.js";
 import {uploadImage, deleteImage} from "./upload.service.js";
 import clothesRepo from "../repositories/clothes.repository.js";
+import aiUsageRepository from "../repositories/aiUsage.repository.js";
 import createPaginationMeta from "../utils/paginationMeta.js";
 import visionService from "../ai/vision.service.js";
 
@@ -211,7 +212,7 @@ const analyzeClothing = async (fileBuffer) => {
         return {
             imageUrl: uploadedImg.secure_url,
             publicId: uploadedImg.public_id,
-            data: analyzedData
+            data: analyzedData.data
         };
     } catch(error) {
         if (uploadedImg?.public_id) {
