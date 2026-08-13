@@ -9,26 +9,40 @@ import visionService from "../ai/vision.service.js";
 
 // Add new clothes
 const add = async (user, body, files) => {
+    let uploadedImages;
     try{
-        const uploadPromises = files.map(async (file) => {
-            const processedBuffer = await processBuffer(file.buffer); // processing with sharp
+        let clothesImage;
+        let isAiGenerated = false;
+        if(body.publicId && body.imageUrl){
+            clothesImage = [{
+                url: body.imageUrl,
+                publicId: body.publicId,
+            }],
+            isAiGenerated = true
+        }
+
+        if(files?.length){
+            const uploadPromises = files.map(async (file) => {
+                const processedBuffer = await processBuffer(file.buffer); // processing with sharp
+                
+                return uploadImage(processedBuffer, "clothes");
+            });
             
-            return uploadImage(processedBuffer, "clothes");
-        });
-
-        const uploadedImages = await Promise.all(uploadPromises);
-
-        const clothesImage = uploadedImages.map((img) => ({
-            url: img.secure_url,
-            publicId: img.public_id,
-            size: img.bytes,
-            width: img.width,
-            height: img.height
-        }));
+            uploadedImages = await Promise.all(uploadPromises);
+            
+            clothesImage = uploadedImages.map((img) => ({
+                url: img.secure_url,
+                publicId: img.public_id,
+                size: img.bytes,
+                width: img.width,
+                height: img.height
+            }));
+        }
 
         const clothesData = {
             userId: user.id,
             ...body,
+            aiGenerated: isAiGenerated,
             clothesImage
         }
 
@@ -37,12 +51,17 @@ const add = async (user, body, files) => {
         return addedClothes;
     } catch(error) {
         logger.error({err: error}, "Failed to process or upload batch");
+        
+        if(uploadedImages.length){
+            await new Promise.allSettled(
+                uploadedImages.map(img => deleteImage(img.publicId))
+            );
+        }
 
         throw new ApiError(
             error.statusCode || 500,
             error.message || "Failed to process clothes images");
     }
-   
 }
 
 // Fetch clothes based on Filters
