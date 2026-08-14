@@ -9,18 +9,22 @@ import visionService from "../ai/vision.service.js";
 
 // Add new clothes
 const add = async (user, body, files) => {
-    let uploadedImages;
+    let uploadedImages = [];
     try{
-        let clothesImage;
+        let clothesImage= [];
         let isAiGenerated = false;
-        if(body.publicId && body.imageUrl){
-            clothesImage = [{
+        
+        // AI-generated image
+        if(body.publicId && body.imageUrl) {
+            clothesImage.push({
                 url: body.imageUrl,
                 publicId: body.publicId,
-            }],
-            isAiGenerated = true
-        }
+            });
 
+            isAiGenerated = true;
+        }
+        
+        // User-uploaded images
         if(files?.length){
             const uploadPromises = files.map(async (file) => {
                 const processedBuffer = await processBuffer(file.buffer); // processing with sharp
@@ -30,13 +34,15 @@ const add = async (user, body, files) => {
             
             uploadedImages = await Promise.all(uploadPromises);
             
-            clothesImage = uploadedImages.map((img) => ({
+            const customImage = uploadedImages.map((img) => ({
                 url: img.secure_url,
                 publicId: img.public_id,
                 size: img.bytes,
                 width: img.width,
                 height: img.height
             }));
+
+            clothesImage.push(...customImage);
         }
 
         const clothesData = {
@@ -52,7 +58,7 @@ const add = async (user, body, files) => {
     } catch(error) {
         logger.error({err: error}, "Failed to process or upload batch");
         
-        if(uploadedImages.length){
+        if(uploadedImages?.length){
             await new Promise.allSettled(
                 uploadedImages.map(img => deleteImage(img.publicId))
             );
